@@ -1,0 +1,270 @@
+﻿@model IEnumerable<MedManager.Models.med_info>
+
+@{
+    Layout = null;
+    ViewBag.Title = "PharmaModPanel";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #eef2f7;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .navbar {
+            background-color: #0B2545;
+            padding: 10px 20px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+            box-sizing: border-box;
+        }
+
+            .navbar h1 {
+                margin: 0;
+                font-size: 20px;
+            }
+
+            .navbar .nav-buttons {
+                display: flex;
+                gap: 10px;
+            }
+
+            .navbar .nav-button {
+                background-color: #134074;
+                border: none;
+                color: white;
+                padding: 8px 15px;
+                border-radius: 5px;
+                cursor: pointer;
+                font-size: 14px;
+                display: flex;
+                align-items: center;
+                gap: 5px;
+            }
+
+                .navbar .nav-button:hover {
+                    background-color: #8da9c4;
+                }
+
+            .navbar .logout-button {
+                background-color: #134074;
+                border: none;
+                color: white;
+                padding: 8px 15px;
+                border-radius: 5px;
+                cursor: pointer;
+                font-size: 14px;
+            }
+
+                .navbar .logout-button:hover {
+                    background-color: #8da9c4;
+                }
+
+        .search-bar-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 60px;
+            padding: 10px 20px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .search-bar {
+            width: 100%;
+            max-width: 600px;
+            padding: 10px;
+            border: 2px solid #134074;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+            .search-bar:focus {
+                outline: none;
+                border-color: #0B2545;
+            }
+
+        .search-bar-container .search-icon {
+            position: absolute;
+            right: 35px;
+            font-size: 20px;
+            color: #0B2545;
+            cursor: pointer;
+        }
+
+        .content {
+            display: flex;
+            padding: 20px;
+            margin-top: 10px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            margin-left: 250px;
+            box-sizing: border-box;
+        }
+
+            .main-content table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+
+                .main-content table th, .main-content table td {
+                    padding: 10px;
+                    text-align: left;
+                    border-bottom: 1px solid #ddd;
+                }
+
+                .main-content table th {
+                    background-color: #134074;
+                    color: white;
+                }
+
+        .action-buttons a {
+            text-decoration: none;
+            padding: 6px 12px;
+            margin: 0 2px;
+            border-radius: 4px;
+            font-size: 14px;
+            color: white;
+        }
+
+        .action-buttons .edit-btn {
+            background-color: #5cb85c;
+        }
+
+        .action-buttons .details-btn {
+            background-color: #5bc0de;
+        }
+
+        .action-buttons .delete-btn {
+            background-color: #d9534f;
+        }
+
+        .action-buttons a:hover {
+            opacity: 0.8;
+        }
+
+        .sidebar {
+            background-color: #f9fafc;
+            padding: 20px;
+            width: 250px;
+            box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+            height: calc(100vh - 80px);
+            position: fixed;
+            top: 80px;
+            box-sizing: border-box;
+        }
+
+            .sidebar h2 {
+                margin: 0;
+                padding-bottom: 10px;
+                border-bottom: 1px solid #ddd;
+                font-size: 18px;
+            }
+    </style>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-dZ3zOe6A+OVlvJXN7bqA7y9P5aD3eNPdrF4URzll0J1K3yoHfC6D+ROo4D6A1d4jq75o3nVQz82Z1m4TpK7DqQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+
+    <div class="navbar">
+        <h1>Pharmacy Moderator Panel</h1>
+        <div class="nav-buttons">
+            <button class="nav-button">
+                @Html.ActionLink("Add Medicine", "addMed", "PharmaMod")
+            </button>
+            <button class="nav-button">
+                <i class="fas fa-exclamation-circle"></i>
+                Special Orders
+            </button>
+        </div>
+        <button class="logout-button">
+            <i class="fas fa-sign-out-alt"></i>
+            @Html.ActionLink("Index", "Index", "Home")
+            Log Out
+        </button>
+    </div>
+
+    <div class="search-bar-container">
+        <input type="text" class="search-bar" placeholder="Search medicines, orders...">
+        <i class="fas fa-search search-icon"></i>
+    </div>
+
+    <div class="content">
+        <div class="main-content">
+            <h2>
+                Medicine list
+            </h2>
+            <table>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.med_name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.med_img)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.quantity)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.med_price)
+                    </th>
+                    <th>Actions</th>
+                </tr>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.med_name)
+                        </td>
+
+                        <td>
+                            <img src="~/Image/@Html.DisplayFor(modelItem => item.med_img)" width="100" height="100" />
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.quantity)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.med_price)
+                        </td>
+                        <td class="action-buttons">
+                            <a class="edit-btn" href="@Url.Action("Edit", "PharmaMod", new { id = item.med_id })">Edit</a>
+                            
+                            <a class="delete-btn" href="@Url.Action("Delete", "PharmaMod", new { id = item.med_id })">Delete</a>
+                        </td>
+                    </tr>
+                }
+
+            </table>
+        </div>
+
+        <div class="sidebar">
+            <h2>Dashboard</h2>
+            <!-- Add dashboard content here -->
+        </div>
+    </div>
+
+</body>
+</html>
+

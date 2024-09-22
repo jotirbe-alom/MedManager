@@ -1,0 +1,189 @@
+﻿@{
+    Layout = null;
+    ViewBag.Title = "Cart";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewBag.Title</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+        }
+
+        .cart-container {
+            max-width: 800px;
+            margin: 50px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+            table th, table td {
+                padding: 12px 15px;
+                text-align: left;
+            }
+
+            table th {
+                background-color: #007bff;
+                color: white;
+            }
+
+            table tbody tr:nth-child(even) {
+                background-color: #f9f9f9;
+            }
+
+        #total-price {
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        button, #confirm-button {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+            button:hover, #confirm-button:hover {
+                background-color: #218838;
+            }
+
+        .checkout-form {
+            display: none;
+            margin-top: 20px;
+        }
+
+            .checkout-form input {
+                width: 100%;
+                padding: 10px;
+                margin-bottom: 10px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+            }
+    </style>
+</head>
+<body onload="showCart()">
+    <div class="cart-container">
+        <h2>Your Cart</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody id="cart-table-body">
+               
+            </tbody>
+        </table>
+        <p>Total Price: <span id="total-price">0 BDT</span></p>
+        <button onclick="showCheckoutForm()">Checkout</button>
+
+        <div class="checkout-form" id="checkout-form">
+            <h3>Enter your details</h3>
+            <input type="text" id="name" placeholder="Full Name" required />
+            <input type="text" id="address" placeholder="Address" required />
+            <input type="text" id="phone" placeholder="Phone Number" required />
+            <button id="confirm-button" onclick="confirmOrder()">Confirm Order</button>
+        </div>
+    </div>
+
+    <script>
+        let cart = JSON.parse(sessionStorage.getItem('cart')) || []; // Retrieve cart or initialize empty
+
+        // Function to display cart items
+        function showCart() {
+            const storedCart = sessionStorage.getItem('cart');
+            if (storedCart) {
+                cart = JSON.parse(storedCart);
+                let cartItems = cart.map(item =>
+                    `<tr>
+                            <td>${item.name}</td>
+                            <td>${item.price} BDT</td>
+                            <td><input type="number" value="${item.quantity}" min="1" onchange="updateQuantity(${item.id}, this.value)"></td>
+                            <td>${item.price * item.quantity} BDT</td>
+                        </tr>`
+                ).join('');
+
+                document.getElementById('cart-table-body').innerHTML = cartItems;
+                document.getElementById('total-price').innerText = `${cart.reduce((total, item) => total + item.price * item.quantity, 0)} BDT`;
+            }
+        }
+
+        // Function to update item quantity
+        function updateQuantity(id, quantity) {
+            const itemIndex = cart.findIndex(item => item.id === id);
+            if (itemIndex > -1) {
+                cart[itemIndex].quantity = parseInt(quantity);
+                sessionStorage.setItem('cart', JSON.stringify(cart));
+                showCart();
+            }
+        }
+
+        // Function to show checkout form
+        function showCheckoutForm() {
+            document.getElementById("checkout-form").style.display = "block";
+        }
+
+        // Function to confirm order
+        function confirmOrder() {
+            const name = document.getElementById("name").value;
+            const address = document.getElementById("address").value;
+            const phone = document.getElementById("phone").value;
+            const total_price = cart.reduce((total, item) => total + item.price * item.quantity, 0);
+
+            if (name && address && phone) {
+                const order = {
+                    name,
+                    address,
+                    phone,
+                    items: cart,
+                    total_price
+                };
+
+
+                // Post order data to server
+                fetch('/User/SaveOrder', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(order)
+                })
+                    .then(response => response.json())
+                    .then(data => {
+
+                        if (data.success) {
+
+                            alert("Order placed successfully!");
+                            sessionStorage.clear(); // Clear cart after order
+                            location.href = "UserHome"; // Redirect to homepage
+                        } else {
+                            alert("There was a problem with placing your order. Please try again.");
+                        }
+                    });
+            } else {
+                alert("Please fill in all the details.");
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,140 @@
+﻿@model IEnumerable<MedManager.Models.Order_info>
+
+@{
+    Layout = null;
+    ViewBag.Title = "UserPaymentInfo";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>UserPaymentInfo</title>
+
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+
+    <style>
+        body {
+            background-color: #e9f7f9;
+            font-family: 'Arial', sans-serif;
+        }
+
+        h1 {
+            text-align: center;
+            color: #444;
+            margin: 20px 0;
+        }
+
+        .table-container {
+            width: 90%;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        .table {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+            .table th {
+                background-color: #2c7d9e;
+                color: white;
+                padding: 10px;
+                text-align: left;
+            }
+
+            .table td {
+                padding: 12px;
+                text-align: left;
+                border-bottom: 1px solid #ddd;
+            }
+
+            .table tr:hover {
+                background-color: #f1f9fc;
+            }
+
+            .table tr:nth-child(odd) {
+                background-color: #f5fafd;
+            }
+
+        .btn {
+            margin-right: 5px;
+        }
+
+        .action-links {
+            display: flex;
+            justify-content: center;
+        }
+
+            .action-links a {
+                color: white;
+                background-color: #dc3545;
+                padding: 8px 12px;
+                border-radius: 5px;
+                text-decoration: none;
+            }
+
+                .action-links a:hover {
+                    background-color: #c82333;
+                }
+
+        .back-link {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+            .back-link a {
+                color: #007bff;
+                text-decoration: none;
+            }
+
+                .back-link a:hover {
+                    text-decoration: underline;
+                }
+    </style>
+</head>
+<body>
+    <div class="table-container">
+        <h1>User Payment Information</h1>
+        <div class="back-link">
+            <p>
+                @Html.ActionLink("Admin Panel", "AdminPanel", "Admin")
+            </p>
+            <table class="table">
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.order_id)</th>
+                    <th>@Html.DisplayNameFor(model => model.name)</th>
+                    <th>@Html.DisplayNameFor(model => model.address)</th>
+                    <th>@Html.DisplayNameFor(model => model.phone)</th>
+                    <th>@Html.DisplayNameFor(model => model.medicine_list)</th>
+                    <th>@Html.DisplayNameFor(model => model.total_price)</th>
+                    <th>Actions</th>
+                </tr>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.order_id)</td>
+                        <td>@Html.DisplayFor(modelItem => item.name)</td>
+                        <td>@Html.DisplayFor(modelItem => item.address)</td>
+                        <td>@Html.DisplayFor(modelItem => item.phone)</td>
+                        <td>@Html.DisplayFor(modelItem => item.medicine_list)</td>
+                        <td>@Html.DisplayFor(modelItem => item.total_price)</td>
+                        <td class="action-links">
+                            @Html.ActionLink("Delete", "Delete", new { id = item.order_id }, new { @class = "btn btn-danger" })
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+
+        <!-- Bootstrap JS and dependencies (optional) -->
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+       
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        </div>
+</body>
+</html>

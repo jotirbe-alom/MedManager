@@ -1,0 +1,123 @@
+﻿@model MedManager.Models.UserLoginClass
+
+@{
+    ViewBag.Title = "UserLogin";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #71b7e6, #9b59b6);
+        }
+
+        .login-container-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .login-container {
+            background: #fff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            font-family: 'Roboto', sans-serif;
+        }
+
+            .login-container h1 {
+                font-size: 2rem;
+                margin-bottom: 20px;
+                color: #333;
+            }
+
+            .login-container .input-group {
+                display: flex;
+                align-items: center;
+                margin-bottom: 20px;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                overflow: hidden;
+            }
+
+                .login-container .input-group i {
+                    padding: 10px;
+                    background: #9b59b6;
+                    color: #fff;
+                }
+
+                .login-container .input-group input {
+                    border: none;
+                    outline: none;
+                    padding: 10px;
+                    flex: 1;
+                }
+
+            .login-container .submit-btn {
+                background: #9b59b6;
+                color: #fff;
+                border: none;
+                padding: 10px;
+                width: 100%;
+                border-radius: 5px;
+                font-size: 1rem;
+                cursor: pointer;
+                transition: background 0.3s ease;
+            }
+
+                .login-container .submit-btn:hover {
+                    background: #8e44ad;
+                }
+
+            .login-container .forgot-password {
+                margin-top: 10px;
+                font-size: 0.9rem;
+            }
+
+                .login-container .forgot-password a {
+                    color: #9b59b6;
+                    text-decoration: none;
+                }
+
+                    .login-container .forgot-password a:hover {
+                        text-decoration: underline;
+                    }
+    </style>
+</head>
+
+<body>
+    <div class="login-container-wrapper">
+        <div class="login-container">
+            <h1>Login</h1>
+            <form asp-action="UserLogin" method="post">
+                <div class="input-group">
+                    <i class="fas fa-user"></i>
+                    <input type="text" name="Email" placeholder="Email" required>
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" name="Password" placeholder="Password" required>
+                </div>
+                <button type="submit" class="submit-btn">Login</button>
+            </form>
+            <div class="forgot-password">
+                <a href="#">Forgot Password?</a>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

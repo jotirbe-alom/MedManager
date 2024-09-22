@@ -1,0 +1,202 @@
+﻿@model IEnumerable<MedManager.Models.med_info>
+@{
+    ViewBag.Title = "MedManager";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f8f8f8;
+            margin: 0;
+        }
+
+        .navbar {
+            width: 100%;
+            background-color: #333;
+            color: #fff;
+            padding: 10px 20px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1001;
+        }
+
+        .sidebar {
+            width: 190px;
+            background-color: #3b7097;
+            color: #fff;
+            padding: 10px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            height: calc(100vh - 50px);
+            position: fixed;
+            top: 50px;
+            left: 0;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+
+
+            .sidebar ul {
+                list-style: none;
+                padding: 0;
+            }
+
+                .sidebar ul li {
+                    margin: 15px 0;
+                }
+
+                    .sidebar ul li a {
+                        color: #fff;
+                        text-decoration: none;
+                        font-size: 18px;
+                        display: block;
+                        padding: 10px;
+                        border-radius: 5px;
+                        transition: background 0.3s ease;
+                    }
+
+                        .sidebar ul li a:hover {
+                            background-color: #575757;
+                        }
+
+        .main-content {
+            margin-top: 70px;
+            margin-left: 190px;
+            padding: 0px;
+        }
+
+        .banner {
+            width: 100%;
+            max-height: 400px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+            .banner img {
+                width: 100%;
+                height: auto;
+            }
+
+        .search-bar-main {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+            .search-bar-main input {
+                width: 100%;
+                max-width: 600px;
+                padding: 10px;
+                border-radius: 5px;
+                border: 1px solid #ddd;
+                outline: none;
+            }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 20px;
+        }
+
+        .product-item {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+            .product-item img {
+                width: 100%;
+                height: auto;
+                border-radius: 5px;
+            }
+
+            .product-item h3 {
+                font-size: 1.2rem;
+                margin: 10px 0;
+            }
+
+            .product-item p {
+                font-size: 1rem;
+                color: #666;
+            }
+
+            .product-item .add-to-cart {
+                margin-top: 10px;
+                padding: 10px;
+                background-color: #007bff;
+                color: #fff;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: background 0.3s ease;
+            }
+
+                .product-item .add-to-cart:hover {
+                    background-color: #0056b3;
+                }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <ul>
+            <li><a href="#"><i class="fas fa-home"></i> General</a></li>
+            <li><a href="#"><i class="fa fa-heart"></i> Heart Care</a></li>
+            <li><a href="#"><i class="fas fa-prescription-bottle"></i> Diabetic Care</a></li>
+            <li><a href="#"><i class="fas fa-cannabis"></i> Stress Control</a></li>
+            <li><a href="#"><i class="fa fa-briefcase"></i> First Aid Box</a></li>
+            <li><a href="#"><i class="fas fa-comment-medical"></i> Special Order</a></li>
+        </ul>
+    </div>
+    <div class="main-content">
+        <div class="banner">
+            <img src="~/Image/bannerimg.jpeg" alt="Banner">
+        </div>
+        <div class="search-bar-main">
+            <input type="text" placeholder="Search for products...">
+        </div>
+        <h1>Products</h1>
+        <div class="product-grid">
+            @foreach (var item in Model)
+            {
+                <div class="product-item">
+                    <img src="~/Image/@Html.DisplayFor(modelItem => item.med_img)">
+                    <h3>@item.med_name</h3>
+                    <p>Unit price: @item.med_price BDT</p>
+                    <button class="add-to-cart" onclick="showLoginAlert()">Add to Cart</button>
+
+                    <script type="text/javascript">
+                        function showLoginAlert() {
+                            alert('Please log in to add items to the cart.');
+                        }
+                    </script>
+
+
+                    <!--
+    <button class="add-to-cart" onclick="window.location.href='@Url.Action("AddtoCart", "Home")'">
+        Add to Cart
+    </button>
+                         <button class="add-to-cart"> Add to Cart</button>
+        -->
+
+
+
+                </div>
+            }
+        </div>
+
+       
+    </div>
+</body>
+</html>
